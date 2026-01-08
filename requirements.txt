@@ -1,4 +1,6 @@
+# service/runtime dependencies
 fastapi>=0.115.0
 uvicorn[standard]>=0.30.0
 pillow>=10.4.0
 numpy>=2.1.0
+tensorflow>=2.20.0

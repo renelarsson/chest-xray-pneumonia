@@ -1,0 +1,5 @@
+model,best_val_auc,eval_auc
+EfficientNetB0 (frozen),0.9921875,0.8882862329483032
+EfficientNetB0 (fine-tuned),1.0,0.9232357740402222
+ResNet50V2 (frozen),0.953125,0.6882533431053162
+ResNet50V2 (fine-tuned),1.0,0.9581360816955566

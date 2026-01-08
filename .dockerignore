@@ -1,0 +1,13 @@
+.venv
+.git
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+*.log
+.notebooks_cache
+.notebook_checkpoints
+notebooks/
+data/
+markdown/
+chest_xray_pneumonia.egg-info/

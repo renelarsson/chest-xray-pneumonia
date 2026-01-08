@@ -1,0 +1,42 @@
+[project]
+name = "chest-xray-pneumonia"
+version = "0.1.0"
+description = "Chest X-Ray Pneumonia classifier + FastAPI service"
+requires-python = ">=3.12"
+readme = "README.md"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+# Service/runtime dependencies (kept minimal for Docker/service)
+dependencies = [
+  "fastapi>=0.115.0",
+  "uvicorn[standard]>=0.30.0",
+  "pillow>=10.4.0",
+  "numpy>=2.1.0",
+]
+
+[project.optional-dependencies]
+# Notebook/training dependencies (heavy; install only when needed)
+notebooks = [
+  "tensorflow>=2.20.0",
+  "kagglehub",
+  "matplotlib",
+  "pandas",
+  "ipykernel",
+  "python-dotenv",
+]
+
+# Optional: only needed if you explicitly use sklearn/scipy in notebooks
+metrics = [
+  "scikit-learn",
+  "scipy",
+]
+
+[tool.uv]
+# No special config required; this section is here for discoverability.
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["service*"]
