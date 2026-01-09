@@ -7,7 +7,6 @@ __pycache__
 *.log
 .notebooks_cache
 .notebook_checkpoints
-notebooks/
-data/
+notebooks/artifacts/
 markdown/
 chest_xray_pneumonia.egg-info/

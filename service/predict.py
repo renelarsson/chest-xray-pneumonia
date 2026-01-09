@@ -10,7 +10,8 @@ from PIL import Image
 import tensorflow as tf
 
 
-MODEL_PATH = Path("artifacts/resnet50v2_ft.keras")
+#MODEL_PATH = Path("notebooks/artifacts/resnet50v2_ft.keras")
+MODEL_PATH = Path(__file__).parent.parent / "notebooks/artifacts/resnet50v2_ft.keras"
 
 app = FastAPI(title="chest-xray-pneumonia")
 

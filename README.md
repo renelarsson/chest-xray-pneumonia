@@ -12,9 +12,11 @@ source .venv/bin/activate
 # Install service/runtime deps
 uv pip install -r requirements.txt
 
-# If you want to run the notebooks too
+# If you want to run the notebooks too (EDA + training)
 uv pip install -e ".[notebooks]"
-uvicorn service.predict:app --host 0.0.0.0 --port 9696
+
+# Run the FastAPI service locally (serves the trained model)
+python -m uvicorn service.predict:app --host 0.0.0.0 --port 9696
 ```
 
 ### Notebooks (Codespaces)
@@ -54,6 +56,25 @@ python train.py --env-file .env.local \
 The FastAPI service in service/predict.py expects the trained model at
 artifacts/resnet50v2_ft.keras (the same path used by the notebook).
 
+### Evaluation script (scripts/eval_model.py)
+
+If you already have a trained model (for example exported from Colab to
+notebooks/artifacts/resnet50v2_ft.keras), you can evaluate it on the
+held-out test set **without retraining**:
+
+```bash
+uv venv --python 3.12 .venv
+source .venv/bin/activate
+
+uv pip install -e ".[notebooks]"
+
+python scripts/eval_model.py \
+  --model notebooks/artifacts/resnet50v2_ft.keras
+```
+
+This script downloads/locates the Kaggle dataset via KaggleHub, builds the
+test pipeline, loads the given Keras model, and prints loss/accuracy/AUC.
+
 ## KaggleHub token (.env)
 
 For local development (especially if you run dataset download code from notebooks or local `.py` scripts), put your KaggleHub token in a `.env` file at the repo root.
@@ -88,6 +109,76 @@ subfolders from that cached location.
 ## API
 - GET /health → `{ "status": "ok" }`
 - POST /predict → multipart `file` image; returns scores and input shape
+
+## API Usage Example
+
+Once the FastAPI service is running, you can test the `/predict` endpoint using `curl`:
+
+```bash
+curl -X POST -F "file=@path/to/sample_image.jpg" http://127.0.0.1:9696/predict
+```
+
+Example Response:
+```json
+{
+  "label": "Pneumonia",
+  "confidence": 0.95
+}
+```
+
+## Tests Performed
+
+### Local FastAPI Service
+- **Health Check**:
+  ```bash
+  curl http://localhost:9696/health
+  ```
+  Response:
+  ```json
+  {"status":"ok"}
+  ```
+
+- **Prediction Endpoint**:
+  ```bash
+  curl -X POST -F "file=@data/normal.jpeg" http://localhost:9696/predict
+  ```
+  Response:
+  ```json
+  {
+    "scores": {
+      "pneumonia": 0.47770124673843384,
+      "normal": 0.5222987532615662
+    },
+    "input_shape": [1, 224, 224, 3],
+    "model_path": "/workspaces/ppe-compliance-detection/notebooks/artifacts/resnet50v2_ft.keras"
+  }
+  ```
+
+### Dockerized Service
+- **Health Check**:
+  ```bash
+  curl http://localhost:9696/health
+  ```
+  Response:
+  ```json
+  {"status":"ok"}
+  ```
+
+- **Prediction Endpoint**:
+  ```bash
+  curl -X POST -F "file=@data/pneumonia.jpeg" http://localhost:9696/predict
+  ```
+  Response:
+  ```json
+  {
+    "scores": {
+      "pneumonia": 0.47770124673843384,
+      "normal": 0.5222987532615662
+    },
+    "input_shape": [1, 224, 224, 3],
+    "model_path": "/app/notebooks/artifacts/resnet50v2_ft.keras"
+  }
+  ```
 
 ## Next Steps
 - Use notebooks/notebook.ipynb for EDA and model comparison

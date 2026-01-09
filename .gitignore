@@ -210,10 +210,6 @@ __marimo__/
 /markdown/
 /workshops/
 /artifacts/
-/notebooks/08_dll_torch_to_TF.ipynb
-/notebooks/08-deep-learning.ipynb
-/notebooks/08-dll-TF.ipynb
-/data/
 *.zip
 *.keras
 
