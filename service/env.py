@@ -14,7 +14,7 @@ def load_repo_dotenv(filename: str = ".env.local") -> bool:
     """
 
     try:
-        from dotenv import load_dotenv  # type: ignore
+        from dotenv import load_dotenv  
     except Exception:
         return False
 

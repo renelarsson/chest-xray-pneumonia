@@ -8,5 +8,4 @@ __pycache__
 .notebooks_cache
 .notebook_checkpoints
 notebooks/artifacts/
-markdown/
 chest_xray_pneumonia.egg-info/

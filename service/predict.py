@@ -57,7 +57,7 @@ async def predict(file: UploadFile = File(...)) -> Dict[str, object]:
     try:
         content = await file.read()
         img = Image.open(io.BytesIO(content))
-    except Exception as e:  # pragma: no cover - defensive
+    except Exception as e:  
         raise HTTPException(status_code=400, detail=f"Invalid image file: {e}")
 
     x = preprocess(img)

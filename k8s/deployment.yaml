@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chest-xray-pneumonia
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chest-xray-pneumonia
+  template:
+    metadata:
+      labels:
+        app: chest-xray-pneumonia
+    spec:
+      containers:
+        - name: api
+          image: chest-xray-pneumonia:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 9696
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 2Gi
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 9696
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 9696
+            initialDelaySeconds: 10
+            periodSeconds: 10

@@ -264,5 +264,5 @@ def main() -> None:
     print(f"Saved fine-tuned model to {output_path}")
 
 
-if __name__ == "__main__":  # pragma: no cover
+if __name__ == "__main__":  
     main()
